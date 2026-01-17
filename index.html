@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, My Anu!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #d4af37; 
+            --romantic-red: #ff4d6d;
+            --soft-pink: #ffccd5;
+            --deep-rose: #c2185b;
+            --glass: rgba(255, 255, 255, 0.8);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #fffafa;
+            color: #333;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- Custom Cursor --- */
+        body { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="%23ff4d6d"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto; }
+
+        /* --- Hero Section with Parallax --- */
+        header {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
+                        url('https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?auto=format&fit=crop&w=1950&q=80');
+            background-attachment: fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .hero-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(4rem, 12vw, 8rem);
+            animation: heartBeat 2s infinite;
+        }
+
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- Music Toggle --- */
+        #music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 3000;
+            background: var(--glass);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* --- Letter Styling --- */
+        .letter-section {
+            padding: 100px 20px;
+            background: radial-gradient(circle at top, #fff5f7 0%, #ffffff 100%);
+        }
+
+        .envelope {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 60px;
+            border-radius: 2px;
+            box-shadow: 20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff;
+            position: relative;
+            border: 1px solid #eee;
+        }
+
+        .envelope::after {
+            content: '';
+            position: absolute;
+            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 1px solid var(--soft-pink);
+            pointer-events: none;
+        }
+
+        /* --- Gallery with Polaroids --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            padding: 50px;
+        }
+
+        .photo-card {
+            background: white;
+            padding: 15px 15px 40px 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transform: rotate(calc(-2deg + (4deg * (var(--i, 0))))); /* Randomized feel */
+            transition: 0.5s;
+        }
+
+        .photo-card:hover {
+            transform: rotate(0deg) scale(1.1);
+            z-index: 10;
+        }
+
+        .photo-card img, .photo-card video {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        /* --- Floating Hearts --- */
+        .floating-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999;
+            animation: rise linear forwards;
+        }
+
+        @keyframes rise {
+            from { transform: translateY(100vh) scale(0.5); opacity: 1; }
+            to { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+        /* --- Modal Styling --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 5000;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 450px;
+        }
+        .mouse-heart {
+    position: absolute;
+    pointer-events: none;
+    z-index: 10000;
+    animation: fadeOut 1s linear forwards;
+    color: var(--romantic-red);
+}
+
+@keyframes fadeOut {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-50px) scale(0); opacity: 0; }
+}
+/* 1. Sparkle/Burst Heart Style */
+.heart-burst {
+    position: absolute;
+    pointer-events: none;
+    z-index: 10001;
+    animation: burst 0.8s ease-out forwards;
+}
+
+@keyframes burst {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(1.2); opacity: 0; }
+}
+
+/* 2. Soft Pulsing Background Glow */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle, rgba(255, 77, 109, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+    animation: pulseGlow 8s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    0% { opacity: 0.3; transform: scale(1); }
+    100% { opacity: 0.8; transform: scale(1.2); }
+}
+
+/* 3. Reveal Animation for Photos */
+.photo-card {
+    opacity: 0;
+    transform: translateY(30px) rotate(calc(-2deg + (4deg * (var(--i, 0)))));
+    transition: all 0.8s ease-out;
+}
+
+.photo-card.visible {
+    opacity: 1;
+    transform: translateY(0) rotate(calc(-2deg + (4deg * (var(--i, 0)))));
+}
+ @keyframes bigPop { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 50% { opacity: 1; } 100% { transform: translate(-50%, -80%) scale(1.5); opacity: 0; } }  
+ /* Advanced Glassmorphism for the Letter */
+.envelope {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 25px 50px -12px rgba(255, 77, 109, 0.2) !important;
+}
+
+/* Photo Aura Effect */
+.photo-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.photo-card::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: conic-gradient(transparent, var(--soft-pink), transparent 30%);
+    animation: rotateAura 4s linear infinite;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.photo-card:hover::before {
+    opacity: 1;
+}
+
+@keyframes rotateAura {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Floating Elements (Petals/Hearts) */
+.floating-petal {
+    position: fixed;
+    top: -10%;
+    pointer-events: none;
+    z-index: 1000;
+    animation: falling linear forwards;
+}
+
+@keyframes falling {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.8; }
+    90% { opacity: 0.8; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+</style>
+</head>
+<body onclick="playMusicOnce()">
+
+    <div id="music-control" onclick="toggleMusic()">🎵</div>
+    <audio id="bg-music" loop>
+        <source src="o-meri-laila-atif-aslam-jyotica-tangri-320kbps_m5rkFuhL.mp3" type="audio/mpeg">
+    </audio>
+
+    <header>
+        <div class="hero-title">Happy Birthday</div>
+        <div style="font-size: 2rem; font-family: 'Dancing Script';">My Anu</div>
+        <p class="subtitle" style="margin-top: 20px;">Scroll to see our story...</p>
+    </header>
+
+    <section class="letter-section">
+        <div class="envelope">
+            <h2 style="font-family: 'Dancing Script'; color: var(--deep-rose); font-size: 3rem; text-align: center;">My Dearest Anu 💕</h2>
+            
+            <div id="typewriter" style="font-size: 1.2rem; line-height: 1.8; color: #444; min-height: 100px;"></div>
+
+            <div class="shayari" style="margin-top: 40px; border-left: 3px solid var(--romantic-red); padding-left: 20px; font-style: italic;">
+               "Khuda kaise na fida hota tum par,<br>
+                Tumhe banakar usne khud par bhi sitam kiya hai.<br>
+                Khush-naseeb hain hum jo tum mile humein,<br>
+                Aaj ke din us khuda ne hum par karam kiya hai." 🫶❤️
+            </div>
+            <div class="shayari" style="margin-top: 40px; border-left: 3px solid var(--romantic-red); padding-left: 20px; font-style: italic;">
+               "Tu hi meri subah, tu hi meri sham hai,<br>
+                Mere hothon pe bas tera hi naam hai.<br>
+                "Zindagi ki har duaa qubool ho gayi,<br>
+                Jab se tum meri zindagi ka hissa ban gayi. <br>
+                Salamat rahe hamesha muskurahat tumhari,<br>
+                Kyuki meri har khushi tumhari khushi se jud gayi."💝
+            </div>
+        </div>
+    </section>
+
+    <section style="background: #fff5f7; padding: 100px 0;">
+        <h2 style="text-align: center; font-family: 'Dancing Script'; font-size: 3.5rem; color: var(--deep-rose);">Captured Memories Of Us</h2>
+        <div class="gallery-grid">
+            
+            <div class="photo-card" style="--i: 1"><img src="WhatsApp Image 2026-01-13 at 8.34.26 PM.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: 1"><img src="WhatsApp Image 2026-01-13 at 8.34.26 PM1.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: 1"><img src="WhatsApp Image 2026-01-13 at 8.34.26 PM2.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: 1"><img src="WhatsApp Image 2026-01-13 at 8.34.27 PM3.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: 1"><img src="WhatsApp Image 2026-01-13 at 8.34.27 PM5.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: 1"><img src="WhatsApp Image 2026-01-13 at 8.46.35 PM.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: 1"><img src="WhatsApp Image 2026-01-14 at 3.30.02 PM.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: -1"><img src="1.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: 2"><img src="2.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: -2"><img src="3.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: -2"><img src="4.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: -2"><img src="5.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: -2"><img src="6.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: -2"><img src="7.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: -2"><img src="8.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: -2"><img src="9.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: -2"><img src="10.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: -2"><img src="11.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: -2"><img src="12.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: -2"><img src="13.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: -2"><img src="14.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: -2"><img src="15.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: -2"><img src="16.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: -2"><img src="17.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: -2"><img src="18.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: -2"><img src="19.jpeg" alt="Anu"></div>
+            <div class="photo-card" style="--i: 1"><video controls><source src="1.mp4"></video></div>
+             <div class="photo-card" style="--i: 1"><video controls><source src="2.mp4"></video></div>
+              <div class="photo-card" style="--i: 1"><video controls><source src="3.mp4"></video></div>
+               <div class="photo-card" style="--i: 1"><video controls><source src="4.mp4"></video></div>
+                <div class="photo-card" style="--i: 1"><video controls><source src="5.mp4"></video></div>
+                <div class="photo-card" style="--i: 1"><video controls><source src="6.mp4"></video></div>
+                 <div class="photo-card" style="--i: 1"><video controls><source src="7.mp4"></video></div>
+                  <div class="photo-card" style="--i: 1"><video controls><source src="8.mp4"></video></div>
+                   <div class="photo-card" style="--i: 1"><video controls><source src="9.mp4"></video></div>
+                    <div class="photo-card" style="--i: 1"><video controls><source src="10.mp4"></video></div>
+                     <div class="photo-card" style="--i: 1"><video controls><source src="11.mp4"></video></div>
+                      <div class="photo-card" style="--i: 1"><video controls><source src="12.mp4"></video></div>
+                       <div class="photo-card" style="--i: 1"><video controls><source src="13.mp4"></video></div>
+                        <div class="photo-card" style="--i: 1"><video controls><source src="14.mp4"></video></div>
+                         <div class="photo-card" style="--i: 1"><video controls><source src="15.mp4"></video></div>
+                          <div class="photo-card" style="--i: 1"><video controls><source src="16.mp4"></video></div>
+                           <div class="photo-card" style="--i: 1"><video controls><source src="17.mp4"></video></div>
+                            <div class="photo-card" style="--i: 1"><video controls><source src="18.mp4"></video></div> 
+                             <div class="photo-card" style="--i: 1"><video controls><source src="19.mp4"></video></div>
+                              <div class="photo-card" style="--i: 1"><video controls><source src="20.mp4"></video></div>
+            </div>
+    </section>
+
+    <section style="text-align: center; padding: 100px 20px; background: white;">
+        <h2 style="font-family: 'Dancing Script'; font-size: 3rem;">Why You're My Everything</h2>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-width: 1000px; margin: 40px auto;">
+            <span style="background: var(--soft-pink); padding: 10px 20px; border-radius: 50px;">Today is all about you, but I feel like I’m the one who got the gift ✨</span>
+            <span style="background: #e1f5fe; padding: 10px 20px; border-radius: 50px;">✨ I hope today shows you even a fraction of how much you're loved.</span>
+            <span style="background: lavender; padding: 10px 20px; border-radius: 50px;">✨ You have a smile that can light up the darkest rooms.</span>
+            <span style="background: #ffeeee; padding: 10px 20px; border-radius: 50px;">✨ Your Heart is My Home: No matter where we are, I feel "at home" the second I’m with you.</span>
+            <span style="background: #f7e3cc; padding: 10px 20px; border-radius: 50px;">✨ You Are My "Once in a Lifetime": I believe I was meant to find you. You are the best thing that ever happened to me.</span>
+            <span style="background: #e8dfce; padding: 10px 20px; border-radius: 50px;">✨ My Home: In your arms, the whole world disappears.</span>
+            <span style="background: #c4b5ff; padding: 10px 20px; border-radius: 50px;">✨ Our Future: I can't wait to grow old with you 🌸</span>
+            <span style="background: #fff9c4; padding: 10px 20px; border-radius: 50px;"> I still think about that time we went to Lonavala from college... the precious time spent with you. 🏔️</span>
+            <span style="background: #f3e5f5; padding: 10px 20px; border-radius: 50px;">The way you handle me ❤️</span>
+        </div>
+        
+        <button onclick="openGift()" style="background: var(--romantic-red); color: white; border: none; padding: 20px 50px; font-size: 1.5rem; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 20px rgba(255, 77, 109, 0.4); font-family: 'Dancing Script';">
+            Click to Open My Heart 🎁
+        </button>
+    </section>
+
+    <div id="giftModal" class="modal">
+        <div class="modal-content">
+            <h2 style="font-family: 'Dancing Script'; color: var(--romantic-red); font-size: 2.5rem;">My 11:11 Wish❤️, Anu!</h2>
+            <img src="123.webp" style="width: 100%; border-radius: 10px; margin: 20px 0;" alt="Hugs">
+             <p style="font-size: 0.9rem; color: #888; font-style: italic;">
+            (I am sending you the tightest hug ever right now!)
+        </p>
+            <p>"Duniya ki har khushi tere naam kar doon...<br>
+            Teri har takleef ko apne naam kar lu"</p>
+            <b>Happy Birthday My Princess,Sunshine</b><br>
+            <button onclick="closeGift()" style="padding: 10px 25px; border-radius: 20px; border: none; background: #333; color: white; cursor: pointer;">Close</button>
+        </div>
+    </div>
+
+
+    <script>
+        // --- 1. MODAL LOGIC ---
+        var modal = document.getElementById("giftModal");
+
+        function openGift() {
+            modal.style.display = "block";
+            createHeartShower(); 
+        }
+
+        function closeGift() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeGift();
+            }
+        }
+
+        // --- 2. FLOATING HEARTS EFFECT ---
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            
+            heart.innerHTML = ['❤️', '💖', '✨', '🌸', '💕'][Math.floor(Math.random() * 5)];
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 3 + 2 + "s";
+            heart.style.opacity = Math.random() * 0.5 + 0.5;
+            heart.style.position = 'fixed';
+            heart.style.bottom = '-50px';
+            heart.style.fontSize = Math.random() * 20 + 20 + 'px';
+            heart.style.zIndex = '999';
+            heart.style.pointerEvents = 'none';
+            
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+
+        setInterval(createHeart, 500);
+
+        function createHeartShower() {
+            for(let i=0; i<20; i++) {
+                setTimeout(createHeart, i * 100);
+            }
+        }
+
+        // --- 3. TYPEWRITER EFFECT ---
+        const message = "They say birthdays are for making wishes, but looking at you, I realize mine already came true. Every day with you feels like a blessing, Anu. You are my Dua, my 11:11 wish, and my forever home. I promise to hold your hand through every high and low. Happy Birthday, My Queen! 👑";
+        let index = 0;
+        const speed = 50; 
+
+        function typeWriter() {
+            const element = document.getElementById("typewriter");
+            if (element && index < message.length) {
+                element.innerHTML += message.charAt(index);
+                index++;
+                setTimeout(typeWriter, speed);
+            }
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            if(entries[0].isIntersecting) typeWriter();
+        }, { threshold: 0.5 });
+        observer.observe(document.querySelector('.envelope'));
+
+        // --- 4. MUSIC CONTROLS ---
+        const audio = document.getElementById('bg-music');
+        function playMusicOnce() {
+            audio.play().catch(e => console.log("Autoplay blocked"));
+            document.body.onclick = null;
+        }
+
+        function toggleMusic() {
+            if (audio.paused) audio.play();
+            else audio.pause();
+        }
+
+        window.onload = () => {
+            console.log("Birthday Page Loaded with Love ❤️");
+        };
+        // --- 5. MOUSE TRAIL HEART EFFECT ---
+document.addEventListener('mousemove', function(e) {
+    // Only create a heart every 5 pixels moved to avoid lag
+    if (Math.random() > 0.1) return; 
+
+    const heart = document.createElement('div');
+    heart.innerHTML = '❤️';
+    heart.className = 'mouse-heart';
+    
+    // Position the heart at the mouse cursor
+    heart.style.left = e.pageX + 'px';
+    heart.style.top = e.pageY + 'px';
+    
+    // Randomize size slightly
+    const size = Math.random() * 10 + 10 + 'px';
+    heart.style.fontSize = size;
+
+    document.body.appendChild(heart);
+
+    // Remove from DOM after animation finishes
+    setTimeout(() => {
+        heart.remove();
+    }, 1000);
+});
+// --- CLICK BURST EFFECT ---
+document.addEventListener('click', function(e) {
+    const heartCount = 6; // Number of hearts in the burst
+    for (let i = 0; i < heartCount; i++) {
+        const heart = document.createElement('div');
+        heart.innerHTML = ['❤️', '💖', '💕', '✨'][Math.floor(Math.random() * 4)];
+        heart.className = 'heart-burst';
+        
+        // Random directions for the burst
+        const angle = (i / heartCount) * Math.PI * 2;
+        const velocity = 50 + Math.random() * 50;
+        const tx = Math.cos(angle) * velocity + 'px';
+        const ty = Math.sin(angle) * velocity + 'px';
+        
+        heart.style.setProperty('--tx', tx);
+        heart.style.setProperty('--ty', ty);
+        heart.style.left = e.pageX + 'px';
+        heart.style.top = e.pageY + 'px';
+        
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 800);
+    }
+});
+// --- GALLERY REVEAL EFFECT ---
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.photo-card').forEach(card => {
+    revealObserver.observe(card);
+});
+// --- DOUBLE TAP PHOTO HEART ---
+document.querySelectorAll('.photo-card').forEach(card => {
+    card.addEventListener('dblclick', function(e) {
+        const bigHeart = document.createElement('div');
+        bigHeart.innerHTML = '❤️';
+        bigHeart.style.cssText = `
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+            animation: bigPop 0.6s ease-out forwards;
+            pointer-events: none;
+            z-index: 20;
+        `;
+        this.appendChild(bigHeart);
+        setTimeout(() => bigHeart.remove(), 600);
+    });
+});
+// --- 6. FALLING ROSE PETALS ---
+function createPetal() {
+    const petal = document.createElement('div');
+    petal.className = 'floating-petal';
+    
+    // Mix of hearts and rose petals
+    const items = ['🌸', '🌹', '❤️', '🌷'];
+    petal.innerHTML = items[Math.floor(Math.random() * items.length)];
+    
+    petal.style.left = Math.random() * 100 + 'vw';
+    petal.style.fontSize = (Math.random() * 10 + 15) + 'px';
+    petal.style.animationDuration = (Math.random() * 5 + 5) + 's';
+    petal.style.opacity = Math.random();
+    
+    document.body.appendChild(petal);
+    setTimeout(() => petal.remove(), 10000);
+}
+setInterval(createPetal, 400); // Create a petal every 400ms
+
+// --- 7. PARALLAX MOUSE EFFECT ---
+// The page background moves slightly with the mouse for a 3D feel
+document.addEventListener('mousemove', (e) => {
+    const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+    const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+    document.body.style.backgroundPosition = `${moveX}px ${moveY}px`;
+});
+
+// --- 8. SMOOTH SCROLL PROGRESS BAR ---
+const progressBar = document.createElement('div');
+progressBar.style.cssText = `
+    position: fixed; top: 0; left: 0; height: 5px; 
+    background: linear-gradient(to right, var(--romantic-red), var(--primary-gold));
+    width: 0%; z-index: 9999; transition: width 0.1s;
+`;
+document.body.appendChild(progressBar);
+
+window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    progressBar.style.width = scrolled + "%";
+});
+    </script>
+    <footer style="background: #1a1a1a; color: white; padding: 50px; text-align: center; border-top: 2px solid var(--romantic-red);">
+    <p>Made for the most special girl in the world.</p>
+    <p style="font-size: 1.5rem; animation: pulse 1.5s infinite;">❤️</p>
+    <p style="opacity: 0.6; font-style: italic;">Made with all my Love by Ayazz for his Anu</p>
+</footer>
+
+<style>
+@keyframes pulse {
+    0% { transform: scale(1); text-shadow: 0 0 0px var(--romantic-red); }
+    50% { transform: scale(1.2); text-shadow: 0 0 20px var(--romantic-red); }
+    100% { transform: scale(1); text-shadow: 0 0 0px var(--romantic-red); }
+}
+</style>
+</body>
+</html>
